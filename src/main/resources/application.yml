@@ -1,0 +1,7 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://Usuario-Prueba-Tecnica:cV3EgeE2DBPvW8AR@clusterpruebatecnica.c8n4tti.mongodb.net/BTG?retryWrites=true&w=majority&appName=ClusterPruebaTecnica
+  server:
+    port: 8080
+
