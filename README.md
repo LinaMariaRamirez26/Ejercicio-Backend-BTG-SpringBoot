@@ -35,35 +35,36 @@ Se conecta a **MongoDB** para persistir la información.
 - `usuarios`
 ```typescript
 {
-  "_id": "1",
-  "nombre": "Juan",
-  "saldo": 1000.0,
-  "fondosSuscritos": ["101", "102"],
-  "preferencia": "Email",
-  "email": "juan@mail.com",
-  "telefono": "3001234567"
+  "_id": "usuario-unico",
+  "nombre": "Usuario Unico",
+  "saldo": 500000,
+  "fondosSuscritos": [],
+  "email": "pruebatecnica@gmail.com",
+  "telefono": "+57311234567",
+  "preferencia": "Email"
 }
+
 ```
 
 - `fondos`
 ```typescript
-{
- {
-  "_id": "101",
-  "nombre": "FondoEjemplo",
-  "montoMinimo": 100.0
-}
+{ "_id": "1", "nombre": "FPV_BTG_PACTUAL_RECAUDADORA", "montoMinimo": 75000, "categoria": "FPV" }
+{ "_id": "2", "nombre": "FPV_BTG_PACTUAL_ECOPETROL", "montoMinimo": 125000, "categoria": "FPV" }
+{ "_id": "3", "nombre": "DEUDAPRIVADA", "montoMinimo": 50000, "categoria": "FIC" }
+{ "_id": "4", "nombre": "FDO-ACCIONES", "montoMinimo": 250000, "categoria": "FIC" }
+{ "_id": "5", "nombre": "FPV_BTG_PACTUAL_DINAMICA", "montoMinimo": 100000, "categoria": "FPV" }
 ```
 - `transacciones`
 ```typescript
 {
-  "_id": "t1",
-  "usuarioId": "1",
-  "fondoId": "101",
-  "monto": 500.0,
-  "tipo": "APERTURA", // o "CANCELACION"
-  "fecha": "2025-08-27T09:30:00"
+   "_id":"4d7af525-0094-4eb7-bc56-902bfd1d5ba6",
+   "usuarioId":"usuario-unico",
+   "fondoId":"5",
+   "monto":120000,
+   "tipo":"APERTURA",
+   "fecha":2025-08-27T03:15:57.478+00:00,
 }
+
 ```
 
 ## Endpoints Backend
