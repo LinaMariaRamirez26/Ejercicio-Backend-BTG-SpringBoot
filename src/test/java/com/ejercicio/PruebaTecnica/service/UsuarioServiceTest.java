@@ -51,26 +51,26 @@ public class UsuarioServiceTest {
     @BeforeEach
     void setup() {
         usuario = new UsuarioEntity();
-        usuario.setId("1");
-        usuario.setNombre("Juan");
+        usuario.setId(Constantes.CODIGO_USUARIO_PRUEBA);
+        usuario.setNombre(Constantes.NOMBRE_USUARIO_PRUEBA);
         usuario.setSaldo(1000.0);
         usuario.setFondosSuscritos(new ArrayList<>());
-        usuario.setPreferencia("Email");
-        usuario.setEmail("juan@mail.com");
+        usuario.setPreferencia(Constantes.PREFERENCIA_PRUEBA);
+        usuario.setEmail(Constantes.CORREO_PRUEBA);
 
         fondo = new FondoEntity();
-        fondo.setId("101");
-        fondo.setNombre("FondoEjemplo");
+        fondo.setId(Constantes.CODIGO_FONDO);
+        fondo.setNombre(Constantes.NOMBRE_FONDO);
         fondo.setMontoMinimo(100.0);
     }
     @Test
     @DisplayName("Test suscribirAFondo falla por saldo insuficiente")
     void suscribirAFondoSaldoInsuficiente() {
-        when(usuarioRepository.findById("1")).thenReturn(Optional.of(usuario));
-        when(fondoRepository.findById("101")).thenReturn(Optional.of(fondo));
+        when(usuarioRepository.findById(Constantes.CODIGO_USUARIO_PRUEBA)).thenReturn(Optional.of(usuario));
+        when(fondoRepository.findById(Constantes.CODIGO_FONDO)).thenReturn(Optional.of(fondo));
 
         RuntimeException exception = assertThrows(RuntimeException.class,
-                () -> usuarioService.suscribirAFondo("1", "101", 50.000));
+                () -> usuarioService.suscribirAFondo(Constantes.CODIGO_USUARIO_PRUEBA, Constantes.CODIGO_FONDO, 50.000));
 
         assertFalse(exception.getMessage().contains(Constantes.SALDO_NO_DISPONIBLE));
     }
@@ -78,20 +78,20 @@ public class UsuarioServiceTest {
     @Test
     @DisplayName("Test cancelarFondo exitoso")
     void cancelarFondoExitoso() {
-        usuario.getFondosSuscritos().add("101");
+        usuario.getFondosSuscritos().add(Constantes.CODIGO_FONDO);
 
         TransaccionEntity transaccion = new TransaccionEntity();
         transaccion.setMonto(500.0);
         transaccion.setTipo(Constantes.APERTURA);
 
-        when(usuarioRepository.findById("1")).thenReturn(Optional.of(usuario));
-        when(fondoRepository.findById("101")).thenReturn(Optional.of(fondo));
-        when(transaccionRepository.findByUsuarioIdAndFondoId("1", "101"))
+        when(usuarioRepository.findById(Constantes.CODIGO_USUARIO_PRUEBA)).thenReturn(Optional.of(usuario));
+        when(fondoRepository.findById(Constantes.CODIGO_FONDO)).thenReturn(Optional.of(fondo));
+        when(transaccionRepository.findByUsuarioIdAndFondoId(Constantes.CODIGO_USUARIO_PRUEBA, Constantes.CODIGO_FONDO))
                 .thenReturn(List.of(transaccion));
         when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuario);
         when(transaccionRepository.save(any(TransaccionEntity.class))).thenReturn(new TransaccionEntity());
 
-        RespuestaCancelacionFondo respuesta = usuarioService.cancelarFondo("1", "101");
+        RespuestaCancelacionFondo respuesta = usuarioService.cancelarFondo(Constantes.CODIGO_USUARIO_PRUEBA, Constantes.CODIGO_FONDO);
 
         assertNotNull(respuesta);
         assertEquals(1500.0, usuario.getSaldo());

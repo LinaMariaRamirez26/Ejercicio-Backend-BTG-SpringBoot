@@ -12,7 +12,7 @@ import java.util.Optional;
 
 /**
  * Clase donde se implementan los servicios encargados de realizar las operaciones
- * relacionadas con el manejo
+ * relacionadas con el manejo de usuarios y sus funciones
  *
  */
 @RestController

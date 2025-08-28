@@ -3,6 +3,7 @@ package com.ejercicio.PruebaTecnica.controller;
 import com.ejercicio.PruebaTecnica.dto.RespuestaCancelacionFondo;
 import com.ejercicio.PruebaTecnica.jpa.entity.UsuarioEntity;
 import com.ejercicio.PruebaTecnica.service.UsuarioService;
+import com.ejercicio.PruebaTecnica.utilies.Constantes;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,16 +27,16 @@ public class UsuarioControllerTest {
     private UsuarioController usuarioController;
 
     @Test
-    @DisplayName("Test obtenerUsuario exitoso (estilo directo)")
+    @DisplayName("Test obtener usuario exitoso")
     void obtenerUsuarioTest() {
         UsuarioEntity usuario = new UsuarioEntity();
-        usuario.setId("1");
-        usuario.setNombre("Juan");
+        usuario.setId(Constantes.CODIGO_USUARIO_PRUEBA);
+        usuario.setNombre(Constantes.NOMBRE_USUARIO_PRUEBA);
         usuario.setSaldo(1000.0);
 
-        when(usuarioService.obtenerUsuario("1")).thenReturn(Optional.of(usuario));
+        when(usuarioService.obtenerUsuario(Constantes.CODIGO_USUARIO_PRUEBA)).thenReturn(Optional.of(usuario));
 
-        Optional<UsuarioEntity> resultado = usuarioController.obtenerUsuario("1");
+        Optional<UsuarioEntity> resultado = usuarioController.obtenerUsuario(Constantes.CODIGO_USUARIO_PRUEBA);
 
         assertTrue(resultado.isPresent());
     }
@@ -44,11 +45,11 @@ public class UsuarioControllerTest {
     @DisplayName("Test cancelar fondo exitoso")
     void cancelarFondoTest() {
         UsuarioEntity usuario = new UsuarioEntity();
-        usuario.setId("1");
-        RespuestaCancelacionFondo respuesta = new RespuestaCancelacionFondo(usuario, "FondoEjemplo");
-        when(usuarioService.cancelarFondo("1", "101")).thenReturn(respuesta);
+        usuario.setId(Constantes.CODIGO_USUARIO_PRUEBA);
+        RespuestaCancelacionFondo respuesta = new RespuestaCancelacionFondo(usuario, Constantes.NOMBRE_FONDO);
+        when(usuarioService.cancelarFondo(Constantes.CODIGO_USUARIO_PRUEBA, Constantes.CODIGO_FONDO)).thenReturn(respuesta);
         ResponseEntity<RespuestaCancelacionFondo> response =
-                usuarioController.cancelarFondo("1", "101");
+                usuarioController.cancelarFondo(Constantes.CODIGO_USUARIO_PRUEBA, Constantes.CODIGO_FONDO);
         assertNotNull(response);
     }
 }

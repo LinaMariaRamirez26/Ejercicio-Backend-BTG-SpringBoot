@@ -31,6 +31,15 @@ public class Constantes {
 
     public static final String CANCELACION = "CANCELACION";
 
+    public static final String CODIGO_USUARIO_PRUEBA = "1";
+    public static final String NOMBRE_USUARIO_PRUEBA = "Juan Perez";
+    public static final String NOMBRE_FONDO = "FPV_BTG_PACTUAL_RECAUDADORA";
+    public static final String CODIGO_FONDO = "101";
+    public static final String PREFERENCIA_PRUEBA =  "Email";
+    public static final String CORREO_PRUEBA =  "juanperez@mail.com";
+
+
+
 
 
 }
