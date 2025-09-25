@@ -1,4 +1,4 @@
-# Configuración del Backend para BTG Fondos App
+# Configuración del Backend Fondos App
 
 Este proyecto es un backend de ejemplo desarrollado en **Spring Boot** que permite a los usuarios:
 
