@@ -1,13 +1,14 @@
 package com.ejercicio.PruebaTecnica.jpa.entity;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.List;
 
+/**
+ * Entidad que representa la coleccion usuarios
+ */
 @Getter
 @Setter
 @Document("usuarios")
@@ -18,7 +19,7 @@ public class UsuarioEntity {
     private String nombre;
     private Double saldo;
     private List<String> fondosSuscritos;
-    private String email;         // correo del usuario
-    private String telefono;      // número para SMS
-    private String preferencia;   // "EMAIL" o "SMS"
+    private String email;
+    private String telefono;
+    private String preferencia;
 }

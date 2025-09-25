@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
 public class UsuarioServiceTest {
 
     @InjectMocks
-    private UsuarioService usuarioService; // tu clase que contiene los métodos
+    private UsuarioService usuarioService;
 
     @Mock
     private UsuarioRepository usuarioRepository;

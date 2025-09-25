@@ -9,7 +9,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-
+/**
+ * Entidad que representa la coleccion transacciones
+ */
 @Getter
 @Setter
 @Document(collection = "transacciones")
@@ -20,6 +22,6 @@ public class TransaccionEntity {
     private String usuarioId;
     private String fondoId;
     private Double monto;
-    private String tipo; // "APERTURA" o "CANCELACION"
+    private String tipo;
     private LocalDateTime fecha;
 }

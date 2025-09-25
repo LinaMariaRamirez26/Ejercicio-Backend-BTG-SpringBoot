@@ -4,10 +4,12 @@ import com.ejercicio.PruebaTecnica.dto.RespuestaCancelacionFondo;
 import com.ejercicio.PruebaTecnica.jpa.entity.TransaccionEntity;
 import com.ejercicio.PruebaTecnica.jpa.entity.UsuarioEntity;
 import com.ejercicio.PruebaTecnica.service.UsuarioService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -71,13 +73,18 @@ public class UsuarioController {
      * @return
      */
     @GetMapping("/{usuarioId}/transacciones")
-    public ResponseEntity<List<TransaccionEntity>> obtenerHistorialTransacciones(
-            @PathVariable String usuarioId) {
+    public ResponseEntity<Page<TransaccionEntity>> obtenerHistorialTransacciones(
+            @PathVariable String usuarioId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
 
-        List<TransaccionEntity> historial =
-                usuarioService.obtenerHistorialTransacciones(usuarioId);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("fecha").descending());
+        Page<TransaccionEntity> historial = usuarioService.obtenerHistorialTransacciones(usuarioId, pageable);
+
         return ResponseEntity.ok(historial);
     }
+
+
 
 
 }

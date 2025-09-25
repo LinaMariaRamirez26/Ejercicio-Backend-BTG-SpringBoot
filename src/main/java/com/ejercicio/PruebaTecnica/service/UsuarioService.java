@@ -1,6 +1,7 @@
 package com.ejercicio.PruebaTecnica.service;
 
 import com.ejercicio.PruebaTecnica.dto.RespuestaCancelacionFondo;
+import com.ejercicio.PruebaTecnica.exception.*;
 import com.ejercicio.PruebaTecnica.jpa.entity.FondoEntity;
 import com.ejercicio.PruebaTecnica.jpa.entity.TransaccionEntity;
 import com.ejercicio.PruebaTecnica.jpa.entity.UsuarioEntity;
@@ -8,16 +9,22 @@ import com.ejercicio.PruebaTecnica.jpa.repository.FondoRepository;
 import com.ejercicio.PruebaTecnica.jpa.repository.TransaccionRepository;
 import com.ejercicio.PruebaTecnica.jpa.repository.UsuarioRepository;
 import com.ejercicio.PruebaTecnica.utilies.Constantes;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Pageable;
+
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Servicio que permite todas las operaciones para la suscripcion, cancelacion y ver historial de transacciones a los fondos
+ * Servicio que permite todas las operaciones para la
+ * suscripcion, cancelacion y ver historial de transacciones de los fondos
  */
 @Service
+@Slf4j
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
@@ -50,20 +57,21 @@ public class UsuarioService {
      * @param monto
      * @return
      */
+    @Transactional
     public UsuarioEntity suscribirAFondo(String usuarioId, String fondoId, Double monto) {
         UsuarioEntity usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new RuntimeException(Constantes.USUARIO_NO_ENCONTRADO));
+                .orElseThrow(() -> new UsuarioNoEncontradoException(Constantes.USUARIO_NO_ENCONTRADO));
 
         FondoEntity fondo = fondoRepository.findById(fondoId)
-                .orElseThrow(() -> new RuntimeException(Constantes.FONDO_NO_ENCONTRADO));
+                .orElseThrow(() -> new FondoNoEncontradoException(Constantes.FONDO_NO_ENCONTRADO));
 
         if (monto < fondo.getMontoMinimo()) {
-            throw new RuntimeException(String.format(Constantes.ERROR_MONTO_MINIMO, fondo.getNombre(), fondo.getMontoMinimo()));
+            throw new MontoMinimoException(String.format(Constantes.ERROR_MONTO_MINIMO, fondo.getNombre(), fondo.getMontoMinimo()));
         }
 
 
         if (usuario.getSaldo() < monto) {
-            throw new RuntimeException(String.format(Constantes.SALDO_NO_DISPONIBLE, fondo.getNombre()));
+            throw new SaldoInsuficienteException(String.format(Constantes.SALDO_NO_DISPONIBLE, fondo.getNombre()));
         }
 
         // descontar saldo
@@ -113,19 +121,19 @@ public class UsuarioService {
      */
     public RespuestaCancelacionFondo cancelarFondo(String usuarioId, String fondoId) {
         UsuarioEntity usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new RuntimeException(Constantes.USUARIO_NO_ENCONTRADO));
+                .orElseThrow(() -> new UsuarioNoEncontradoException(Constantes.USUARIO_NO_ENCONTRADO));
 
         FondoEntity fondo = fondoRepository.findById(fondoId)
-                .orElseThrow(() -> new RuntimeException(Constantes.FONDO_NO_ENCONTRADO));
+                .orElseThrow(() -> new FondoNoEncontradoException(Constantes.FONDO_NO_ENCONTRADO));
 
-        System.out.println("Fondos suscritos: " + usuario.getFondosSuscritos());
-        System.out.println("FondoId a cancelar: " + fondoId);
+        log.info("Fondos suscritos: " + usuario.getFondosSuscritos());
+        log.info("Id Fondo a cancelar: " + fondoId);
 
         // Verificar si está suscrito por ID (no por nombre)
         boolean suscrito = usuario.getFondosSuscritos().contains(fondoId);
 
         if (!suscrito) {
-            throw new RuntimeException(String.format(Constantes.USUARIO_NO_SUSCRITO,fondo.getNombre()));
+            throw new UsuarioNoSuscritoException(String.format(Constantes.USUARIO_NO_SUSCRITO,fondo.getNombre()));
         }
 
         // Calcular el monto invertido
@@ -134,7 +142,7 @@ public class UsuarioService {
                 .sum();
 
         if (montoInvertido <= 0) {
-            throw new RuntimeException(String.format(Constantes.ERROR_SIN_SALDO_INVERTIDO, fondo.getNombre()));
+            throw new SinSaldoInvertidoException(String.format(Constantes.ERROR_SIN_SALDO_INVERTIDO, fondo.getNombre()));
         }
 
         // Actualizar saldo y eliminar fondo
@@ -161,7 +169,8 @@ public class UsuarioService {
      * @param usuarioId
      * @return
      */
-    public List<TransaccionEntity> obtenerHistorialTransacciones(String usuarioId) {
-        return transaccionRepository.findByUsuarioIdOrderByFechaDesc(usuarioId);
+    public Page<TransaccionEntity> obtenerHistorialTransacciones(String usuarioId, Pageable pageable) {
+        return transaccionRepository.findByUsuarioIdOrderByFechaDesc(usuarioId, pageable);
     }
+
 }

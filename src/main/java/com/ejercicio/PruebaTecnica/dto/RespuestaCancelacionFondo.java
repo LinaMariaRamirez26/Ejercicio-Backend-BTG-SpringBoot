@@ -4,7 +4,9 @@ import com.ejercicio.PruebaTecnica.jpa.entity.UsuarioEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
+/**
+ * Clase donde se implementan los dto`s necesarios con el manejo de usuarios y sus funciones
+ */
 @Data
 @NoArgsConstructor
 public class RespuestaCancelacionFondo {

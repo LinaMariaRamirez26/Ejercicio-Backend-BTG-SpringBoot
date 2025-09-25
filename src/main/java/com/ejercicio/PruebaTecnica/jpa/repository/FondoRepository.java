@@ -5,8 +5,9 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
-public interface FondoRepository extends MongoRepository<FondoEntity, String> {
-    List<FondoEntity> findByNombre(String nombre);
+/**
+ * Repositorio de acceso a datos para la entidad {@link FondoEntity}.
+ */
 
-    List<FondoEntity> findByNombreContainingIgnoreCase(String nombre);
+public interface FondoRepository extends MongoRepository<FondoEntity, String> {
 }

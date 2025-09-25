@@ -9,7 +9,7 @@ package com.ejercicio.PruebaTecnica.utilies;
 public class Constantes {
 
     /**
-     * Constantes: STR_FORMATO_FECHA_HORA_MINUTO_SEGUNDO
+     * Constantes
      *
      * @since 1.0.0
      */
